@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">XLLGps</string>
+    <string name="upload_success">upload success!</string>
+    <string name="upload_failed">upload failed!</string>
+    <string name="download_success">download success!</string>
+    <string name="download_failed">download failed!</string>
+    <string name="report_success">report success!</string>
+    <string name="report_failed">report failed!</string>
+
+    <string name="get_gps_permission_fail">get gps permission failed!</string>
+</resources>

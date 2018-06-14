@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">XLLGPS</string>
+
+
+
+    <string name="upload_success">上传成功 !</string>
+    <string name="upload_failed">上传失败 !</string>
+    <string name="download_success">下载成功 !</string>
+    <string name="download_failed">下载失败 !</string>
+    <string name="report_success">上报成功 !</string>
+    <string name="report_failed">上报失败!</string>
+
+    <string name="get_gps_permission_fail">获取权限失败 !</string>
+</resources>
