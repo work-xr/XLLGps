@@ -2,6 +2,7 @@ package com.hsf1002.sky.xllgps.http;
 
 
 import com.hsf1002.sky.xllgps.bean.ReceiveMsg;
+import com.hsf1002.sky.xllgps.bean.TrackMsg;
 
 import java.util.List;
 
@@ -89,6 +90,16 @@ public interface ApiService {
             @Field("tpcode") String tpcode,
             //@Field("timestamp") String timestamp,
             @Field("sign") String sign
+    );
+
+    // http://auth.hoinnet.com:8001/checkin
+    @POST("http://auth.hoinnet.com:8001/checkin")
+    @FormUrlEncoded
+    Observable<TrackMsg>  getTrackLoginInfo(
+            @Field("debug") boolean debug,
+            @Field("meid") String meid,
+            @Field("type") String type,
+            @Field("version") String version
     );
 
 }

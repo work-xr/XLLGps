@@ -8,6 +8,7 @@ import com.allen.library.observer.CommonObserver;
 import com.hsf1002.sky.xllgps.baidu.BaiduGpsApp;
 import com.hsf1002.sky.xllgps.bean.ReceiveMsg;
 import com.hsf1002.sky.xllgps.bean.SendMsg;
+import com.hsf1002.sky.xllgps.bean.TrackMsg;
 import com.hsf1002.sky.xllgps.http.ApiService;
 import com.hsf1002.sky.xllgps.util.MD5Utils;
 import com.hsf1002.sky.xllgps.util.SharedPreUtils;
@@ -183,6 +184,28 @@ public class RxjavaHttpModel implements BaseModel {
                         Log.d(TAG, "onSuccess: s = " + s);
                     }
                 });*/
+
+// ?debug=true&meid=888065053311128&type=fytrack&version=track,com.hoinnet.yftrack
+        RxHttpUtils.getSInstance()
+                .createSApi(ApiService.class)
+                .getTrackLoginInfo(
+                        true,
+                        "888065053311128",
+                        "fytrack",
+                        "track,com.hoinnet.yftrack"
+                )
+                .compose(Transformer.<TrackMsg>switchSchedulers())
+                .subscribe(new CommonObserver<TrackMsg>() {
+                    @Override
+                    protected void onError(String s) {
+                        Log.d(TAG, "onError: s = " + s);
+                    }
+
+                    @Override
+                    protected void onSuccess(TrackMsg trackMsg) {
+                        Log.d(TAG, "onSuccess: trackMsg = " + trackMsg);
+                    }
+                });
     }
 
     // http://api.cloud.site4test.com/thirdparty/index/location/receive/

@@ -18,7 +18,7 @@ public class Const {
     public static final String URL_APP_ID_VALUE = "5cd12ff1222ef64d1a5227a181631a2195e1b456";
     public static final String URL_APP_SECRET_VALUE = "0512a2c055a970f7e64381c7eee4f9da";
     public static final String URL_SIGN_VALUE = "ee0906c15cb85385a63b349e6c27460a";
-    public static final String URL_TPCODE_VALUE = "&tpcode=xiaobawangmobile";
+    public static final String URL_TPCODE_VALUE = "xiaobawangmobile";
     public static final int TIMESTAMP_START_INDEX = 0;
     public static final int TIMESTAMP_END_INDEX = 10;
 
