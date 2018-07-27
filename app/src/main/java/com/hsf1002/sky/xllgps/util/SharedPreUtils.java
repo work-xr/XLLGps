@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import com.hsf1002.sky.xllgps.app.XLLGpsApplication;
 
-import static com.hsf1002.sky.xllgps.util.Const.SHARED_PREFERENCE_NAME;
+import static com.hsf1002.sky.xllgps.util.Constant.SHARED_PREFERENCE_NAME;
 
 /**
  * Created by hefeng on 18-6-12.

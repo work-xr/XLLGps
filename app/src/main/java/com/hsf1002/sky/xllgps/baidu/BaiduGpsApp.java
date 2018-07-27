@@ -1,25 +1,25 @@
 package com.hsf1002.sky.xllgps.baidu;
 
 import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.hsf1002.sky.xllgps.bean.SendMsg;
-import com.hsf1002.sky.xllgps.model.RxjavaHttpModel;
-import com.hsf1002.sky.xllgps.util.SprdCommonUtils;
+import com.hsf1002.sky.xllgps.app.XLLGpsApplication;
+import com.hsf1002.sky.xllgps.params.BaiduGpsParam;
+import com.hsf1002.sky.xllgps.util.DateTimeUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
-import static com.hsf1002.sky.xllgps.util.Const.BAIDU_GPS_FIRST_SCAN_TIME_MAX;
-import static com.hsf1002.sky.xllgps.util.Const.TIMESTAMP_END_INDEX;
-import static com.hsf1002.sky.xllgps.util.Const.TIMESTAMP_START_INDEX;
-import static com.hsf1002.sky.xllgps.util.Const.URL_PHONE_NUMBER;
-import static com.hsf1002.sky.xllgps.util.Const.URL_TOKEN;
+import static android.content.Context.WIFI_SERVICE;
+import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_LOCATION_SCAN_TIMEOUT;
+import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_LOCATION_TYPE_GPS;
+import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_LOCATION_TYPE_LBS;
+import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_LOCATION_TYPE_WIFI;
+import static com.hsf1002.sky.xllgps.util.Constant.BAUDU_GPS_LOCATION_COORD_TYPE;
 
 
 /**
@@ -33,11 +33,12 @@ public class BaiduGpsApp {
     private LocationClientOption option;
     private static long startTime = 0;
     private static long currentTime = 0;
-    private SendMsg sendMsg;
+    /* 用于保存本次定位结果 */
+    private static BaiduGpsParam sBaiduGpsMsgBean;
 
     BaiduGpsApp()
     {
-        sendMsg = new SendMsg();
+        sBaiduGpsMsgBean = new BaiduGpsParam();
     }
 
     public static BaiduGpsApp getInstance()
@@ -55,7 +56,6 @@ public class BaiduGpsApp {
         Log.d(TAG, "initBaiduSDK: ");
         myLocationLister = new MyLocationLister();
         client = new LocationClient(context);
-        startTime = System.currentTimeMillis();
         initLocation();
     }
 
@@ -69,7 +69,7 @@ public class BaiduGpsApp {
         //option.setCoorType("bd09ll");
         option.setIsNeedAddress(true);
         //可选，设置发起定位请求的间隔，int类型，单位ms, 如果设置为0，则代表单次定位，即仅定位一次，默认为0, 如果设置非0，需设置1000ms以上才有效
-        option.setScanSpan(5000);
+        option.setScanSpan(BAIDU_GPS_LOCATION_SCAN_TIMEOUT);
         //可选，设置是否使用gps，默认false, 使用高精度和仅用设备两种定位模式的，参数必须设置为true
         option.setOpenGps(true);
         //可选，定位SDK内部是一个service，并放到了独立进程。设置是否在stop的时候杀死这个进程，默认（建议）不杀死，即setIgnoreKillProcess(true)
@@ -116,36 +116,45 @@ public class BaiduGpsApp {
     {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
-            StringBuilder curPosition = new StringBuilder();
-            curPosition.append("Lantitude: ").append(bdLocation.getLatitude()).append(", ");
-            curPosition.append("Longtitude:").append(bdLocation.getLongitude()).append(", ");
-            curPosition.append("Country: ").append(bdLocation.getCountry()).append(", ");
-            curPosition.append("City:").append(bdLocation.getCity()).append(", ");
-            curPosition.append("District: ").append(bdLocation.getDistrict()).append(", ");
-            curPosition.append("Street:").append(bdLocation.getStreet()).append(", ");
-            curPosition.append("location way: ");
+            String latitude = String.valueOf(bdLocation.getLatitude());
+            String longitude = String.valueOf(bdLocation.getLongitude());
+            String locationType = BAIDU_GPS_LOCATION_TYPE_GPS;
+            String locType = getLocType(bdLocation.getLocType());// 1->"Baidu" 2->"GaoDe";
+            StringBuilder address = new StringBuilder();
+
+            address.append(bdLocation.getCountry()).append(bdLocation.getCity()).append(bdLocation.getDistrict()).append(bdLocation.getStreet());
 
             if (bdLocation.getLocType() == BDLocation.TypeGpsLocation)
             {
-                curPosition.append("GPS");
+                locationType = BAIDU_GPS_LOCATION_TYPE_GPS;
             }
             else if (bdLocation.getLocType() == BDLocation.TypeNetWorkLocation) 
             {
-                curPosition.append("NETWORK");
+                WifiManager wifiManager = (WifiManager)XLLGpsApplication.getAppContext().getApplicationContext().getSystemService(WIFI_SERVICE);
+                WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                if (wifiManager.getWifiState() == WifiManager.WIFI_STATE_ENABLED && wifiInfo != null)
+                {
+                    String ssid = wifiInfo.getSSID();
+                    Log.d(TAG, "onReceiveLocation: ssid = " + ssid);
+
+                    if (!TextUtils.isEmpty(ssid))
+                    {
+                        locationType = BAIDU_GPS_LOCATION_TYPE_WIFI;
+                    }
+                    else
+                    {
+                        locationType = BAIDU_GPS_LOCATION_TYPE_LBS;
+                    }
+                }
             }
             else
             {
-                curPosition.append("null");         
+                locationType = "null";
             }
             
-            currentTime = System.currentTimeMillis();
+            //currentTime = System.currentTimeMillis();
             //Log.d(TAG, "onReceiveLocation: startTimie = " + startTime + ", currentTime = " + currentTime);
-            if (currentTime - startTime >= BAIDU_GPS_FIRST_SCAN_TIME_MAX)
-            {
-                //Log.d(TAG, "onReceiveLocation: cost too long(larger than) " + BAIDU_GPS_FIRST_SCAN_TIME_MAX/1000 + " seconds to locate, timeout, stop gps..........");
-                stopBaiduGps();
-                return;
-            }
+            Log.d(TAG, "onReceiveLocation: latitude = " + latitude + ", longitude = " + longitude + ", address = " + address.toString() + ", locationType = " + locationType + ", getLocType = " + locType);
 /*
 * http://lbsyun.baidu.com/index.php?title=android-locsdk/guide/addition-func/error-code
 *若返回值是162~167，请将错误码、IMEI、定位唯一标识（自v7.2版本起，通过BDLocation.getLocationID方法获取）和定位时间反馈至邮箱loc-bugs@baidu.com
@@ -162,19 +171,14 @@ public class BaiduGpsApp {
 
             if (bdLocation.getLocType() == BDLocation.TypeGpsLocation || bdLocation.getLocType() == BDLocation.TypeNetWorkLocation)
             {
-                Log.d(TAG, "onReceiveLocation: 0   get location success, stop gps service");
-                setSendMsg(String.valueOf(bdLocation.getLongitude()),
-                        String.valueOf(bdLocation.getLatitude()),
-                        String.valueOf(System.nanoTime()),
-                        getLocType(bdLocation.getLocType()),
-                        "1",
-                        bdLocation.getCountry() + bdLocation.getCity() + bdLocation.getDistrict() + bdLocation.getStreet(),
-                        1,
-                        "gcj02"
-                        );
-                RxjavaHttpModel.getInstance().pushGpsInfo();
-                stopBaiduGps();
+                Log.d(TAG, "onReceiveLocation:  get location success, stop gps service");
+                setBaiduGpsStatus(address.toString(), latitude, longitude, locType, locationType);
             }
+            else
+            {
+                Log.d(TAG, "onReceiveLocation:  get location failed, stop gps service");
+            }
+            stopBaiduGps();
         }
 
         @Override
@@ -187,31 +191,30 @@ public class BaiduGpsApp {
             super.onLocDiagnosticMessage(i, i1, s);
         }
     }
-    private void setSendMsg(String longitude,
-                            String latitude,
-                            String locTime,
-                            String locType,
-                            String type,
-                            String address,
-                            int source_type,
-                            String coord_type)
-    {
-        Date date= new Date();
-        SimpleDateFormat smft=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  // 2016-04-26 13:22:22
-        String nowString=smft.format(date.getTime());
 
-        sendMsg.setLongitude(longitude);
-        sendMsg.setLantitude(latitude);
-        sendMsg.setLocTime(nowString);
-        sendMsg.setLocType(locType);
-        sendMsg.setType(type);
-        sendMsg.setAddress(address);
-        sendMsg.setSource_type(String.valueOf(source_type));
-        sendMsg.setCoord_type(coord_type);
-        sendMsg.setMobile(URL_PHONE_NUMBER);
-        sendMsg.setImei(SprdCommonUtils.getInstance().getIMEI());
-        sendMsg.setTimestamp(String.valueOf(System.currentTimeMillis()).substring(TIMESTAMP_START_INDEX, TIMESTAMP_END_INDEX));
-        sendMsg.setToken(URL_TOKEN);
+    private void setBaiduGpsStatus(String address, String latitude, String longitude, String locType, String source_type)
+    {
+        /*
+        sBaiduGpsMsgBean.setCoord_type(BAUDU_GPS_LOCATION_COORD_TYPE);
+        sBaiduGpsMsgBean.setGisInfo(address);
+        sBaiduGpsMsgBean.setLat(latitude);
+        sBaiduGpsMsgBean.setLng(longitude);
+        sBaiduGpsMsgBean.setLocTime(DateTimeUtils.getFormatCurrentTime());
+        sBaiduGpsMsgBean.setLocType(locType);
+        sBaiduGpsMsgBean.setSource_type(source_type);
+        */
+        sBaiduGpsMsgBean.setCoord_type(BAUDU_GPS_LOCATION_COORD_TYPE);
+        sBaiduGpsMsgBean.setGisInfo("中国深圳市南山区科技南十二路");
+        sBaiduGpsMsgBean.setLat("22.537702");
+        sBaiduGpsMsgBean.setLng("113.95717");
+        sBaiduGpsMsgBean.setLocTime(DateTimeUtils.getFormatCurrentTime());
+        sBaiduGpsMsgBean.setLocType(locType);
+        sBaiduGpsMsgBean.setSource_type(source_type);
+    }
+
+    public BaiduGpsParam getBaiduGpsStatus()
+    {
+        return sBaiduGpsMsgBean;
     }
 
     private String getLocType(int type)
@@ -232,10 +235,5 @@ public class BaiduGpsApp {
         }
 
         return locType;
-    }
-
-    public SendMsg getSendMsg()
-    {
-        return sendMsg;
     }
 }

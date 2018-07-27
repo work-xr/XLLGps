@@ -4,14 +4,14 @@ package com.hsf1002.sky.xllgps.util;
  * Created by hefeng on 18-6-8.
  */
 
-public class Const {
+public class Constant {
 
-    public static final String URL_LV = "lv=1";
-    public static final String URL_APP_ID = "&app_id=5cd12ff1222ef64d1a5227a181631a2195e1b456";
-    public static final String URL_APP_SECRET = "&app_secret=0512a2c055a970f7e64381c7eee4f9da";
-    public static final String URL_TOKEN = "65e5bc4c79b3430ad11e793ae9dde2b53";
+    public static final String URL_LV = "&lv=1";
+    public static final String URL_APP_ID = "&app_id=bc7007b968877d0d3eec4caa77127c99a96aeb2b";
+    public static final String URL_APP_SECRET = "&app_secret=9ff96155b3f42dc7a337aa59ca59578b";
     public static final String URL_TPCODE = "&tpcode=xiaobawangmobile";
-    public static final String URL_TIMESTAMP = "&timestamp=1493857458";
+
+    public static final String URL_TOKEN = "65e5bc4c79b3430ad11e793ae9dde2b53";
     public static final String URL_PHONE_NUMBER = "18818681242";
     public static final String URL_ENCODE_TYPE = "UTF-8";
     public static final String URL_LV_VALUE = "1";
@@ -24,13 +24,25 @@ public class Const {
 
     public static final String SHARED_PREFERENCE_NAME = "lxjgps_sp";
 
-    public static final String RXJAVAHTTP_BASE_URL = "https://api.douban.com/";
+    public static final String RXJAVAHTTP_BASE_URL = "http://api.cloud.site4test.com";//https://api.douban.com/";
     public static final int RXJAVAHTTP_READ_TIMEOUT = 100;
     public static final int RXJAVAHTTP_WRITE_TIMEOUT = 100;
     public static final int RXJAVAHTTP_CONNCET_TIMEOUT = 100;
+
+    public static final String SOS_RECEIVED_ACTION = "sos_received_action";
+    public static final String LOCATION_TYPE_PLATFORM = "1";         // 平台定位
+    public static final String LOCATION_TYPE_DWSMS = "2";            // DW短信定位
+    public static final String LOCATION_SOURCE_TYPE_ORDINARY = "1";  // 普通定位
+    public static final String LOCATION_SOURCE_TYPE_SOS = "2";       // SOS定位
 
     // 每隔多久启动一次IntentService服务来开始定位,可由服务器端通过调用setStartServiceInterval进行设置更改
     public static final int BAIDU_GPS_SCAN_SPAN_TIME_INTERVAL = 1 * 60 * 1000;
     // 每次启动百度地图服务XLJGpsService.setServiceAlarm(getApplicationContext(), true);, 如果3分钟内没有定位成功, 自动停止地图服务stopBaiduGps
     public static final int BAIDU_GPS_FIRST_SCAN_TIME_MAX = 3 * 60 * 1000;
+    // 每隔多久发起一次请求
+    public static final int BAIDU_GPS_LOCATION_SCAN_TIMEOUT = 10 * 1000;
+    public static final String BAIDU_GPS_LOCATION_TYPE_GPS = "gps";
+    public static final String BAIDU_GPS_LOCATION_TYPE_LBS = "lbs";
+    public static final String BAIDU_GPS_LOCATION_TYPE_WIFI = "wifi";
+    public static final String BAUDU_GPS_LOCATION_COORD_TYPE = "gcj02";
 }

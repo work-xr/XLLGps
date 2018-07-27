@@ -3,6 +3,7 @@ package com.hsf1002.sky.xllgps.http;
 
 import com.hsf1002.sky.xllgps.bean.ReceiveMsg;
 import com.hsf1002.sky.xllgps.bean.TrackMsg;
+import com.hsf1002.sky.xllgps.result.ResultMsg;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by hefeng on 18-6-8.
@@ -20,8 +22,10 @@ import retrofit2.http.Path;
 
 public interface ApiService {
     // http://api.cloud.site4test.com/thirdparty/mobile/location/list?imei=864648030095476&start=2017-10-25 17:00:00&lv=1&app_id=bc7007b968877d0d3eec4caa77127c99a96aeb2b&app_secret=9ff96155b3f42dc7a337aa59ca59578b
-    @GET("http://api.cloud.site4test.com/thirdparty/mobile/location/list?imei=864376039982516&start=2017-10-25 17:00:00&lv=1&app_id=bc7007b968877d0d3eec4caa77127c99a96aeb2b&app_secret=9ff96155b3f42dc7a337aa59ca59578b")
-    Observable<List<ReceiveMsg>> getGpsInfo();
+    @GET("http://api.cloud.site4test.com/thirdparty/mobile/location/list?&lv=1&app_id=bc7007b968877d0d3eec4caa77127c99a96aeb2b&app_secret=9ff96155b3f42dc7a337aa59ca59578b")
+    Observable<List<ResultMsg<ReceiveMsg>>> getGpsInfo(
+            @Query("imei") String imei
+    );
 
    /* {
             "mobile": "13333333333",
@@ -49,9 +53,10 @@ public interface ApiService {
                                    @Field("source_type") int source_type,
                                    @Field("coord_type") String coord_type,
                                    @Field("timestamp") int timeStamp);*/
-    @POST("http://api.cloud.site4test.com/thirdparty/index/location/receive/")
+    @POST("/thirdparty/index/location/receive")
     @FormUrlEncoded
-    Observable<String> pushGpsInfo(
+    Observable<ResultMsg> pushGpsInfo(
+            /*
             @Field("coord_type") String coord_type,
             @Field("gisInfo") String address,
             @Field("imei") String imei,
@@ -64,15 +69,15 @@ public interface ApiService {
             @Field("timestamp") int timeStamp,
             //@Field("token") String token,
             @Field("type") String type/*,
-            @Path("url") String url*/);
-   //@PUT("http://api.cloud.site4test.com/thirdparty/index/location/receive/{url}")
-   //Observable<String> pushGpsInfo(@Path("url") String url);
+            @Path("url") String url*/
+            );
+
 
     @POST("http://api.cloud.site4test.com/thirdparty/index/location/receive")
     @FormUrlEncoded
-    Observable<String> pushGpsSimpleInfo(
+    Observable<ResultMsg> pushGpsSimpleInfo(
             @Field("coord_type") String coord_type,
-            //@Field("gisInfo") String address,
+            @Field("gisInfo") String address,
             @Field("imei") String imei,
             @Field("lat") String latitude,
             @Field("lng") String longitude,
@@ -80,7 +85,7 @@ public interface ApiService {
             @Field("locType") String locType,
             //@Field("mobile") String mobile,
             @Field("source_type") String source_type,
-            @Field("timestamp") int timeStamp,
+            @Field("timestamp") String timeStamp,
             //@Field("token") String token,
             //@Field("type") String type/*,
 
@@ -88,14 +93,15 @@ public interface ApiService {
             @Field("app_id") String app_id,
             @Field("app_secret") String app_secret,
             @Field("tpcode") String tpcode,
-            //@Field("timestamp") String timestamp,
+            @Field("timestamp") String timestamp,
+            @Field("mdversion") String mdversion,
             @Field("sign") String sign
     );
 
     // http://auth.hoinnet.com:8001/checkin
     @POST("http://auth.hoinnet.com:8001/checkin")
     @FormUrlEncoded
-    Observable<TrackMsg>  getTrackLoginInfo(
+    Observable<ResultMsg<TrackMsg>>  getTrackLoginInfo(
             @Field("debug") boolean debug,
             @Field("meid") String meid,
             @Field("type") String type,

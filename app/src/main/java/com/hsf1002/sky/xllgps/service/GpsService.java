@@ -6,12 +6,16 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.hsf1002.sky.xllgps.baidu.BaiduGpsApp;
+import com.hsf1002.sky.xllgps.location.NetworkApp;
+import com.hsf1002.sky.xllgps.location.NetworkGpsApp;
+import com.hsf1002.sky.xllgps.model.RxjavaHttpModel;
 
-import static com.hsf1002.sky.xllgps.util.Const.BAIDU_GPS_SCAN_SPAN_TIME_INTERVAL;
+import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_SCAN_SPAN_TIME_INTERVAL;
+import static com.hsf1002.sky.xllgps.util.Constant.LOCATION_SOURCE_TYPE_ORDINARY;
+import static com.hsf1002.sky.xllgps.util.Constant.LOCATION_TYPE_PLATFORM;
 
 /**
  * Created by hefeng on 18-6-11.
@@ -25,10 +29,20 @@ public class GpsService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand: ");
         BaiduGpsApp.getInstance().startBaiduGps();
+
+        //NetworkGpsApp.getInstance().getLocationNetworkGps();
+        //NetworkApp.getInstance().getLocationNetwork();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                RxjavaHttpModel.getInstance().pushGpsInfo(LOCATION_TYPE_PLATFORM, LOCATION_SOURCE_TYPE_ORDINARY);
+            }
+        }).start();
+
         return super.onStartCommand(intent, flags, startId);
     }
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;

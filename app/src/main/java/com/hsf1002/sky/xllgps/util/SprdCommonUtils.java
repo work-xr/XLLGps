@@ -5,34 +5,26 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.hsf1002.sky.xllgps.app.XLLGpsApplication;
+
 /**
  * Created by hefeng on 18-6-11.
  */
 
 public class SprdCommonUtils {
     private static final String TAG = "SprdCommonUtils";
-    private Context context;
-
-    public void init(Context context)
-    {
-        this.context = context;
-    }
-
-    private SprdCommonUtils()
-    {
-    }
 
     public String getIMEI()
     {
-        TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager telephonyManager = (TelephonyManager) XLLGpsApplication.getAppContext().getSystemService(Context.TELEPHONY_SERVICE);
         String deviceId = null;
-        int phoneCount = telephonyManager.getPhoneCount();
-        Log.d(TAG, "getIMEI: " + phoneCount);
+        //int phoneCount = telephonyManager.getPhoneCount();
+        //Log.d(TAG, "getIMEI: " + phoneCount);
 
-        for (int slot = 0; slot < phoneCount; slot++)
+        for (int slot = 0; slot < 2/*phoneCount*/; slot++)
         {
             try {
-                deviceId = telephonyManager.getDeviceId(slot);
+                deviceId = telephonyManager.getDeviceId();
             }catch (SecurityException e)
             {
                 e.printStackTrace();
