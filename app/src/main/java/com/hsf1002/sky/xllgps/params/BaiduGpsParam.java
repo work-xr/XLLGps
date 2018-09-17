@@ -11,7 +11,7 @@ public class BaiduGpsParam {
     protected String lng;         // 经度
     protected String locTime;     // 定位时间: yyyy-MM-dd HH:mm:ss
     protected String locType;     // 定位类型: 1-GPS  2-GPS_One  3-激战定位
-    protected String source_type; // 来源类型 1-普通定位 2-SOS定位
+    //protected String source_type; // 来源类型 1-普通定位 2-SOS定位
 
     public BaiduGpsParam() {
     }
@@ -23,7 +23,6 @@ public class BaiduGpsParam {
         this.lng = lng;
         this.locTime = locTime;
         this.locType = locType;
-        this.source_type = source_type;
     }
 
     public String getCoord_type() {
@@ -74,14 +73,6 @@ public class BaiduGpsParam {
         this.locType = locType;
     }
 
-    public String getSource_type() {
-        return source_type;
-    }
-
-    public void setSource_type(String source_type) {
-        this.source_type = source_type;
-    }
-
     @Override
     public String toString() {
         return "BaiduGpsParam{" +
@@ -91,54 +82,6 @@ public class BaiduGpsParam {
                 ", lng='" + lng + '\'' +
                 ", locTime='" + locTime + '\'' +
                 ", locType='" + locType + '\'' +
-                ", source_type='" + source_type + '\'' +
                 '}';
     }
-
-    /*protected String position_type;
-    protected String loc_type;
-    protected String longitude;
-    protected String latitude;
-
-    public BaiduGpsParam() {
-    }
-
-    public BaiduGpsParam(String position_type, String loc_type, String longitude, String latitude) {
-        this.position_type = position_type;
-        this.loc_type = loc_type;
-        this.longitude = longitude;
-        this.latitude = latitude;
-    }
-
-    public String getPosition_type() {
-        return position_type;
-    }
-
-    public String getLoc_type() {
-        return loc_type;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setPosition_type(String position_type) {
-        this.position_type = position_type;
-    }
-
-    public void setLoc_type(String loc_type) {
-        this.loc_type = loc_type;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }*/
 }

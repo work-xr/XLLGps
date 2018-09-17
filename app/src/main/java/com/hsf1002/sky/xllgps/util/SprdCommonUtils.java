@@ -5,7 +5,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.hsf1002.sky.xllgps.app.XLLGpsApplication;
+import com.hsf1002.sky.xllgps.app.GpsApplication;
 
 /**
  * Created by hefeng on 18-6-11.
@@ -16,7 +16,7 @@ public class SprdCommonUtils {
 
     public String getIMEI()
     {
-        TelephonyManager telephonyManager = (TelephonyManager) XLLGpsApplication.getAppContext().getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager telephonyManager = (TelephonyManager) GpsApplication.getAppContext().getSystemService(Context.TELEPHONY_SERVICE);
         String deviceId = null;
         //int phoneCount = telephonyManager.getPhoneCount();
         //Log.d(TAG, "getIMEI: " + phoneCount);

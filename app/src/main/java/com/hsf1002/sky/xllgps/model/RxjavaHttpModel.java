@@ -8,21 +8,16 @@ import com.allen.library.interceptor.Transformer;
 import com.allen.library.observer.CommonObserver;
 import com.hsf1002.sky.xllgps.baidu.BaiduGpsApp;
 import com.hsf1002.sky.xllgps.bean.ReceiveMsg;
+import com.hsf1002.sky.xllgps.bean.TrackMsg;
 import com.hsf1002.sky.xllgps.http.ApiService;
+import com.hsf1002.sky.xllgps.http.HttpUtil;
 import com.hsf1002.sky.xllgps.params.BaiduGpsParam;
-import com.hsf1002.sky.xllgps.params.ReportParam;
+
 import com.hsf1002.sky.xllgps.result.ResultMsg;
 import com.hsf1002.sky.xllgps.util.MD5Utils;
 import com.hsf1002.sky.xllgps.util.SharedPreUtils;
 import com.hsf1002.sky.xllgps.util.SprdCommonUtils;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -103,12 +98,11 @@ public class RxjavaHttpModel{
                 sb.append("&");
             }
         }
-        //String signStr = sb.substring(0, sb.length() - 1);
 
         return sb.toString();
     }
 
-    private static String getParamStr()
+    private static String getParamStr(String timeStamp)
     {
         Map<String, Object> params = new HashMap<String, Object>();
         BaiduGpsParam baiduGpsParam = BaiduGpsApp.getInstance().getBaiduGpsStatus();
@@ -116,8 +110,8 @@ public class RxjavaHttpModel{
         params.put("locTime", baiduGpsParam.getLocTime());
         params.put("locType", baiduGpsParam.getLocType());
         //params.put("mobile", sendMsg.getMobile());
-        params.put("source_type", baiduGpsParam.getSource_type());
-        params.put("timestamp", String.valueOf(System.currentTimeMillis()));
+        params.put("source_type", "1");
+        params.put("timestamp", timeStamp);
         params.put("token", URL_TOKEN);
         params.put("type", "1");
 
@@ -150,7 +144,8 @@ public class RxjavaHttpModel{
         String timeStamp = String.valueOf(System.currentTimeMillis());
         String mvversion = "V1.0000000";//SystemProperties.get("ro.product.externversion");
 
-        String params = getParamStr();
+        timeStamp = timeStamp.substring(0, 10);
+        String params = getParamStr(timeStamp);
         String data = params;
         String sign;
 
@@ -159,7 +154,7 @@ public class RxjavaHttpModel{
 
         Log.e(TAG, "pushGpsInfo: imei = " + imei + ", params = " + params);
         //String sortedGsonString = getSortedParam(gsonString);
-/*
+
         try
         {
             data = URLEncoder.encode(params, URL_ENCODE_TYPE);
@@ -168,9 +163,9 @@ public class RxjavaHttpModel{
         {
             e.printStackTrace();
         }
-*/
+
         //sign = getSignedString();//MD5Utils.encrypt(gsonString/*data + RXJAVAHTTP_SECRET_CODE*/);
-        sign = MD5Utils.encrypt(params);
+        sign = MD5Utils.encrypt(data);
         //Log.d(TAG, "pushGpsInfo: encodedData = " + data);
 
         String lastPart1 = getUrlTail();
@@ -178,10 +173,10 @@ public class RxjavaHttpModel{
 
         Log.d(TAG, "pushGpsInfo: lastPart1 = " + lastPart1);
         Log.d(TAG, "pushGpsInfo: lastPart2 = " + lastPart2);
-        String completStr = data + lastPart1 + lastPart2;
+        String completeStr = params + lastPart1 + lastPart2;
 
-        Log.d(TAG, "pushGpsInfo: completeParam = " + completStr);
-
+        Log.e(TAG, "pushGpsInfo: completeParam = " + completeStr);
+/*
         try
         {
             data = URLEncoder.encode(completStr, URL_ENCODE_TYPE);
@@ -191,11 +186,35 @@ public class RxjavaHttpModel{
             e.printStackTrace();
         }
 
-        Log.d(TAG, "pushGpsInfo: data = " + data);
-
+        Log.e(TAG, "pushGpsInfo: data = " + data);
+*/
         String baseUrl = "http://api.cloud.site4test.com/thirdparty/index/location/receive";
+        final String completeUrl = baseUrl + "?" + completeStr;
+/*
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpUtil.postHttpRequest(completeUrl);
+            }
+        }).start();
+*/
+        //sendPost(baseUrl, data);
 
-        sendPost(baseUrl, data);
+        RxHttpUtils.getSInstance()
+                .createSApi(ApiService.class)
+                .postUrl(completeUrl)
+                .compose(Transformer.<ResultMsg<TrackMsg>>switchSchedulers())
+                .subscribe(new CommonObserver<ResultMsg<TrackMsg>>() {
+                    @Override
+                    protected void onError(String s) {
+                        Log.i(TAG, "onError: s = " + s);
+                    }
+
+                    @Override
+                    protected void onSuccess(ResultMsg<TrackMsg> trackMsgResultMsg) {
+
+                    }
+                });
 
 /*
         RxHttpUtils.getSInstance()
@@ -248,72 +267,7 @@ public class RxjavaHttpModel{
         private static RxjavaHttpModel instance = new RxjavaHttpModel();
     }
 
-    public String sendPost(String url, String param) {
-        PrintWriter out = null;
-        BufferedReader in = null;
-        String result = "";
-        try {
-            URL realUrl = new URL(url);
-            HttpURLConnection conn = (HttpURLConnection)realUrl.openConnection();
 
-            Log.d(TAG, "sendPost: url = " + url);
-            Log.d(TAG, "sendPost: param = " + param);
-
-            conn.setRequestProperty("accept", "*/*");
-            conn.setRequestProperty("connection", "Keep-Alive");
-            conn.setRequestProperty("user-agent","Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-            conn.setRequestProperty("Charset", "UTF-8");
-            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-            conn.setUseCaches(false);
-            conn.setInstanceFollowRedirects(true);
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            conn.setRequestMethod("POST");
-
-            //Log.d(TAG, "sendPost: conn = " + conn.getURL().toString());
-            out = new PrintWriter(conn.getOutputStream());
-            out.print(param);
-            out.flush();
-            int responseCode = conn.getResponseCode();
-            Log.d(TAG, "sendPost: httpUrlConnection.getResponseCode() = " + responseCode);
-            if (responseCode == HttpURLConnection.HTTP_OK ||
-                    responseCode == HttpURLConnection.HTTP_CREATED ||
-                    responseCode == HttpURLConnection.HTTP_ACCEPTED) {
-                in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-                Log.d(TAG, "sendPost: ok--------------------");
-            }
-            else
-            {
-                in = new BufferedReader(new InputStreamReader(((HttpURLConnection) conn).getErrorStream(), "UTF-8"));
-                Log.d(TAG, "sendPost: error--------------------");
-            }
-            String line;
-            while ((line = in.readLine()) != null) {
-                result += line;
-            }
-        } catch (Exception e) {
-            Log.d(TAG, "sendPost: e = " + e);
-            e.printStackTrace();
-        }
-        finally{
-            try{
-                if(out!=null){
-                    out.close();
-                }
-                if(in!=null){
-                    in.close();
-                }
-            }
-            catch(IOException ex){
-                ex.printStackTrace();
-            }
-        }
-        // sendPost: result = {"status":0,"description":"\u7f3a\u5c11\u5fc5\u987b\u53c2\u6570[timestamp]"}  缺少必须参数
-        Log.d(TAG, "sendPost: result = " + result);
-
-        return result;
-    }
 
     public static String sendPostMessage(URL url, Map<String, String> params, String encode) {
         // 作为StringBuffer初始化的字符串
@@ -406,7 +360,7 @@ public class RxjavaHttpModel{
         params.put("locTime", sendMsg.getLocTime());
         params.put("locType", sendMsg.getLocType());
         //params.put("mobile", sendMsg.getMobile());
-        params.put("source_type", sendMsg.getSource_type());
+        params.put("source_type", "1");
        // params.put("timestamp", sendMsg.getTimestamp());
         //params.put("type", sendMsg.getType());
 

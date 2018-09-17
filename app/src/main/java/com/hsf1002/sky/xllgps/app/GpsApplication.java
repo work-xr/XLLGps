@@ -17,8 +17,8 @@ import static com.hsf1002.sky.xllgps.util.Constant.RXJAVAHTTP_WRITE_TIMEOUT;
  * Created by hefeng on 18-6-6.
  */
 
-public class XLLGpsApplication extends Application {
-    private static final String TAG = "XLLGpsApplication";
+public class GpsApplication extends Application {
+    private static final String TAG = "GpsApplication";
     private static Context sContext;
 
     @Override
@@ -29,7 +29,7 @@ public class XLLGpsApplication extends Application {
         sContext = getApplicationContext();
         BaiduGpsApp.getInstance().initBaiduSDK(sContext);
         //startService(new Intent(this, GpsService.class));
-        GpsService.setServiceAlarm(getApplicationContext(), true);
+        GpsService.setServiceAlarm(sContext, true);
 
         rxjavaHttpInit();
     }

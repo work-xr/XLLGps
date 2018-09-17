@@ -36,7 +36,7 @@ public class Constant {
     public static final String LOCATION_SOURCE_TYPE_SOS = "2";       // SOS定位
 
     // 每隔多久启动一次IntentService服务来开始定位,可由服务器端通过调用setStartServiceInterval进行设置更改
-    public static final int BAIDU_GPS_SCAN_SPAN_TIME_INTERVAL = 1 * 60 * 1000;
+    public static final int BAIDU_GPS_SCAN_SPAN_TIME_INTERVAL = 3 * 60 * 1000;
     // 每次启动百度地图服务XLJGpsService.setServiceAlarm(getApplicationContext(), true);, 如果3分钟内没有定位成功, 自动停止地图服务stopBaiduGps
     public static final int BAIDU_GPS_FIRST_SCAN_TIME_MAX = 3 * 60 * 1000;
     // 每隔多久发起一次请求
@@ -45,4 +45,11 @@ public class Constant {
     public static final String BAIDU_GPS_LOCATION_TYPE_LBS = "lbs";
     public static final String BAIDU_GPS_LOCATION_TYPE_WIFI = "wifi";
     public static final String BAUDU_GPS_LOCATION_COORD_TYPE = "gcj02";
+    // 由于上传给服务器的数据不能为空, 定位数据的默认值
+    public static final String BAIDU_GPS_LOCATION_DEFAULT_ADDRESS = "sz";
+    public static final String BAIDU_GPS_LOCATION_DEFAULT_LONGITUDE = "4.9E-324";   // 114.044044
+    public static final String BAIDU_GPS_LOCATION_DEFAULT_LANTITUDE = "4.9E-324";   // 22.522522
+    public static final String BAIDU_GPS_LOCATION_DEFAULT_LOCTYPE = "3";            // 1: gps  2: gps one 3: 基站定位
+    public static final String BAIDU_GPS_LOCATION_DEFAULT_LOCTIME = "2018-09-26 13:13:13";
+    public static final String BAIDU_GPS_LOCATION_DEFAULT_COORDINATE_TYPE = "GCJ02";  // WGS84：大地坐标系     GCJ02：国家测绘局坐标系统     BD09：百度坐标系
 }

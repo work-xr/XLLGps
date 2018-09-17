@@ -2,7 +2,6 @@ package com.hsf1002.sky.xllgps.location;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -12,10 +11,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 import android.util.Log;
 
-import com.hsf1002.sky.xllgps.app.XLLGpsApplication;
+import com.hsf1002.sky.xllgps.app.GpsApplication;
 import com.hsf1002.sky.xllgps.http.HttpUtil;
 
 import org.json.JSONArray;
@@ -25,7 +23,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.location.Criteria.ACCURACY_FINE;
 import static android.location.Criteria.POWER_LOW;
 
@@ -69,9 +66,9 @@ public class NetworkGpsApp {
         }
     };
 
-    public void getLocationNetworkGps()
+    public void getLocationNetworkGps() throws SecurityException
     {
-        LocationManager locationManager = (LocationManager) XLLGpsApplication.getAppContext().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) GpsApplication.getAppContext().getSystemService(Context.LOCATION_SERVICE);
         //LocationProvider gpsProvider = locationManager.getProvider(LocationManager.GPS_PROVIDER);           //1.通过GPS定位，较精确。也比較耗电
         //LocationProvider netProvider = locationManager.getProvider(LocationManager.NETWORK_PROVIDER);       //2.通过网络定位。对定位精度度不高或省点情况可考虑使用
 
@@ -122,7 +119,7 @@ public class NetworkGpsApp {
             Intent i = new Intent();
             i.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             i.setFlags(FLAG_ACTIVITY_NEW_TASK);
-            XLLGpsApplication.getAppContext().startActivity(i);
+            GpsApplication.getAppContext().startActivity(i);
 
             Log.d(TAG, "init: startActivity");
         }*/
@@ -164,7 +161,7 @@ public class NetworkGpsApp {
                 try{
                     String request = "http://maps.googleapis.com/maps/api/geocode/json?latlng=";
                     request += location.getLatitude()+","+location.getLongitude()+"&sensor=false";
-                    String response = HttpUtil.sendHttpRequest(XLLGpsApplication.getAppContext(),request);
+                    String response = HttpUtil.getHttpRequest(GpsApplication.getAppContext(),request);
                     parseJSONResponse(response);
 
                 }
@@ -223,7 +220,7 @@ public class NetworkGpsApp {
 
     private static void geocoder(double latitude, double longitude)
     {
-        Geocoder gc = new Geocoder(XLLGpsApplication.getAppContext(), Locale.getDefault());
+        Geocoder gc = new Geocoder(GpsApplication.getAppContext(), Locale.getDefault());
         List<Address> locationList = null;
 
         try {
