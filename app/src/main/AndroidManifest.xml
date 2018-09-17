@@ -43,6 +43,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".receiver.SosReceiver" >
+            <intent-filter>
+                <action android:name="action.sos.report.position" />
+            </intent-filter>
+        </receiver>
         <receiver android:name=".receiver.StartupReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

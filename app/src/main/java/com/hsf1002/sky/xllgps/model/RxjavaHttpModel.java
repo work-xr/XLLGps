@@ -13,6 +13,7 @@ import com.hsf1002.sky.xllgps.http.ApiService;
 import com.hsf1002.sky.xllgps.http.HttpUtil;
 import com.hsf1002.sky.xllgps.params.BaiduGpsParam;
 
+import com.hsf1002.sky.xllgps.result.ResultGpsMsg;
 import com.hsf1002.sky.xllgps.result.ResultMsg;
 import com.hsf1002.sky.xllgps.util.MD5Utils;
 import com.hsf1002.sky.xllgps.util.SharedPreUtils;
@@ -30,6 +31,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -102,7 +104,7 @@ public class RxjavaHttpModel{
         return sb.toString();
     }
 
-    private static String getParamStr(String timeStamp)
+    private static String getParamStr(String timeStamp, String sourceType)
     {
         Map<String, Object> params = new HashMap<String, Object>();
         BaiduGpsParam baiduGpsParam = BaiduGpsApp.getInstance().getBaiduGpsStatus();
@@ -110,7 +112,7 @@ public class RxjavaHttpModel{
         params.put("locTime", baiduGpsParam.getLocTime());
         params.put("locType", baiduGpsParam.getLocType());
         //params.put("mobile", sendMsg.getMobile());
-        params.put("source_type", "1");
+        params.put("source_type", sourceType);
         params.put("timestamp", timeStamp);
         params.put("token", URL_TOKEN);
         params.put("type", "1");
@@ -131,7 +133,7 @@ public class RxjavaHttpModel{
         return tailStr;
     }
 
-    public void pushGpsInfo(String type, String source_type)
+    public void pushGpsInfo(String source_type)
     {
         //String mobile = BaiduGpsApp.getInstance().getSendMsg().getMobile();
         String imei = SprdCommonUtils.getInstance().getIMEI();
@@ -145,7 +147,7 @@ public class RxjavaHttpModel{
         String mvversion = "V1.0000000";//SystemProperties.get("ro.product.externversion");
 
         timeStamp = timeStamp.substring(0, 10);
-        String params = getParamStr(timeStamp);
+        String params = getParamStr(timeStamp, source_type);
         String data = params;
         String sign;
 
@@ -203,16 +205,16 @@ public class RxjavaHttpModel{
         RxHttpUtils.getSInstance()
                 .createSApi(ApiService.class)
                 .postUrl(completeUrl)
-                .compose(Transformer.<ResultMsg<TrackMsg>>switchSchedulers())
-                .subscribe(new CommonObserver<ResultMsg<TrackMsg>>() {
+                .compose(Transformer.<ResultGpsMsg>switchSchedulers())
+                .subscribe(new CommonObserver<ResultGpsMsg>() {
                     @Override
                     protected void onError(String s) {
                         Log.i(TAG, "onError: s = " + s);
                     }
 
                     @Override
-                    protected void onSuccess(ResultMsg<TrackMsg> trackMsgResultMsg) {
-
+                    protected void onSuccess(ResultGpsMsg stringResultMsg) {
+                        Log.i(TAG, "onSuccess: stringResultMsgGson = " + ResultGpsMsg.getResultGpsMsgGson(stringResultMsg));
                     }
                 });
 

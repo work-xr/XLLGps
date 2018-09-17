@@ -3,6 +3,7 @@ package com.hsf1002.sky.xllgps.http;
 
 import com.hsf1002.sky.xllgps.bean.ReceiveMsg;
 import com.hsf1002.sky.xllgps.bean.TrackMsg;
+import com.hsf1002.sky.xllgps.result.ResultGpsMsg;
 import com.hsf1002.sky.xllgps.result.ResultMsg;
 
 import java.util.List;
@@ -110,7 +111,7 @@ public interface ApiService {
     );
 
     @POST
-    Observable<ResultMsg<TrackMsg>> postUrl(
+    Observable<ResultGpsMsg> postUrl(
             @Url String url
     );
 }

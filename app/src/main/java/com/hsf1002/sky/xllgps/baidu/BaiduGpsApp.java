@@ -179,7 +179,7 @@ public class BaiduGpsApp {
             {
                 locationType = "null";
             }
-            Log.i(TAG, "onReceiveLocation: locType = " + locType + ", latitude = " + latitude + ", longitude = " + longitude + ", address = " + address.toString() + ", locationType = " + locationType + ", getLocType = " + locType);
+            Log.i(TAG, "onReceiveLocation: locType = " + locType + ", latitude = " + latitude + ", longitude = " + longitude + ", address = " + address.toString() + ", locationType = " + locationType + ", getLocType = " + locType + ", locTime = " + locTime);
 
             if (locType == BDLocation.TypeGpsLocation || locType == BDLocation.TypeNetWorkLocation)
             {

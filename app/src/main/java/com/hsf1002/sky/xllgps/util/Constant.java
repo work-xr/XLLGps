@@ -51,5 +51,12 @@ public class Constant {
     public static final String BAIDU_GPS_LOCATION_DEFAULT_LANTITUDE = "4.9E-324";   // 22.522522
     public static final String BAIDU_GPS_LOCATION_DEFAULT_LOCTYPE = "3";            // 1: gps  2: gps one 3: 基站定位
     public static final String BAIDU_GPS_LOCATION_DEFAULT_LOCTIME = "2018-09-26 13:13:13";
+	// 按键SOS后发此广播, 收到广播后,上传信息到平台
+    public static final String ACTION_SOS_REPORT_POSITION = "action.sos.report.position";
+	public static final String ACTION_POWER_ON = "android.intent.action.BOOT_COMPLETED";
+	// 开启数据业务
+    public static final String ACTION_ACTIVATED_CONNECTIVITY = "intent.action.ACTIVATED_CONNECTIVITY";
+    // 关闭数据业务
+    public static final String ACTION_INACTIVATED_CONNECTIVITY = "intent.action.INACTIVATED_CONNECTIVITY";
     public static final String BAIDU_GPS_LOCATION_DEFAULT_COORDINATE_TYPE = "GCJ02";  // WGS84：大地坐标系     GCJ02：国家测绘局坐标系统     BD09：百度坐标系
 }

@@ -122,7 +122,7 @@ public class GpsService extends Service {
             Log.i(TAG, "onReceive: gpsReceiver startServiceInterval = " + startServiceInterval);
 
             BaiduGpsApp.getInstance().startBaiduGps();
-            RxjavaHttpModel.getInstance().pushGpsInfo(LOCATION_TYPE_PLATFORM, LOCATION_SOURCE_TYPE_ORDINARY);
+            RxjavaHttpModel.getInstance().pushGpsInfo(LOCATION_SOURCE_TYPE_ORDINARY);
 
             // setExact 无法唤醒
             //sManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + startServiceInterval, sPendingIntent);
