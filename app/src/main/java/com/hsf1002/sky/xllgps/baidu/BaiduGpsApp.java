@@ -40,7 +40,7 @@ public class BaiduGpsApp {
     /**
     *  author:  hefeng
     *  created: 18-8-13 下午6:33
-    *  desc:    初始化定位, 开机就要上传定位信息
+    *  desc:    初始化定位
     *  param:
     *  return:
     */
@@ -50,6 +50,13 @@ public class BaiduGpsApp {
         setBaiduGpsStatus(null, null, null, null, null, null);
     }
 
+    /**
+    *  author:  hefeng
+    *  created: 18-9-17 下午7:21
+    *  desc:    创建单例
+    *  param:
+    *  return:
+    */
     public static BaiduGpsApp getInstance()
     {
         return Holder.sInstance;
@@ -60,6 +67,13 @@ public class BaiduGpsApp {
         private static final BaiduGpsApp sInstance = new BaiduGpsApp();
     }
 
+    /**
+    *  author:  hefeng
+    *  created: 18-9-17 下午7:21
+    *  desc:    初始化百度SDK
+    *  param:
+    *  return:
+    */
     public void initBaiduSDK(Context context)
     {
         Log.d(TAG, "initBaiduSDK: ");
@@ -68,6 +82,13 @@ public class BaiduGpsApp {
         initLocation();
     }
 
+    /**
+    *  author:  hefeng
+    *  created: 18-9-17 下午7:21
+    *  desc:    百度定位配置信息
+    *  param:
+    *  return:
+    */
     private void initLocation()
     {
         Log.d(TAG, "initLocation: ");
@@ -89,6 +110,13 @@ public class BaiduGpsApp {
         client.setLocOption(option);
     }
 
+    /**
+    *  author:  hefeng
+    *  created: 18-9-17 下午7:22
+    *  desc:    启动百度定位
+    *  param:
+    *  return:
+    */
     public void startBaiduGps()
     {
         Log.d(TAG, "startBaiduGps: isStarted = " + client.isStarted());
@@ -99,6 +127,13 @@ public class BaiduGpsApp {
         }
     }
 
+    /**
+    *  author:  hefeng
+    *  created: 18-9-17 下午7:22
+    *  desc:    停止百度定位
+    *  param:
+    *  return:
+    */
     public void stopBaiduGps() {
         Log.d(TAG, "stopBaiduGps: isStarted = " + client.isStarted());
         if (client.isStarted()) 
@@ -108,6 +143,13 @@ public class BaiduGpsApp {
         }
     }
 
+    /**
+    *  author:  hefeng
+    *  created: 18-9-17 下午7:22
+    *  desc:    重启百度定位
+    *  param:
+    *  return:
+    */
     public void restartBaiduGps()
     {
         Log.d(TAG, "restartBaiduGps: ");
@@ -115,6 +157,13 @@ public class BaiduGpsApp {
         client.restart();
     }
 
+    /**
+    *  author:  hefeng
+    *  created: 18-9-17 下午7:22
+    *  desc:    设置发起百度定位的频率
+    *  param:
+    *  return:
+    */
     public void setBaiduGpsScanSpan(int span)
     {
         Log.d(TAG, "setBaiduGpsScanSpan: ");

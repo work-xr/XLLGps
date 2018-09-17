@@ -43,7 +43,7 @@ public class GpsService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "onStartCommand: ");
-         return START_STICKY;
+        return START_STICKY;
     }
 
     @Override
@@ -51,6 +51,13 @@ public class GpsService extends Service {
         return null;
     }
 
+    /**
+    *  author:  hefeng
+    *  created: 18-9-17 下午7:27
+    *  desc:    开启或关闭服务
+    *  param:
+    *  return:
+    */
     public static void setServiceAlarm(Context context, boolean isOn)
     {
         Intent intent = new Intent(context, GpsService.class);
@@ -58,7 +65,7 @@ public class GpsService extends Service {
         sContext.startService(intent);
 
         sIntentReceiver = new Intent(ACTION_TIMING_REPORT_GPS_LOCATION);
-        sPendingIntent = PendingIntent.getBroadcast(context, 0, sIntentReceiver, 0);
+        sPendingIntent = PendingIntent.getBroadcast(context, 0, sIntentReceiver, PendingIntent.FLAG_UPDATE_CURRENT);
 
         sManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Log.e(TAG, "setServiceAlarm: startServiceInterval = " + startServiceInterval + ", isOn = " + isOn);
@@ -68,7 +75,7 @@ public class GpsService extends Service {
             // 刚开机, 刚开启定时定位服务的第一次, 不上报定位信息, 30分钟后再上报
             //sManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + startServiceInterval, startServiceInterval, pi);
             //sManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pi);
-            sManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), sPendingIntent);
+            sManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + startServiceInterval, sPendingIntent);
         }
         else
         {
@@ -115,7 +122,6 @@ public class GpsService extends Service {
      *  param:
      *  return:
      */
-
     private BroadcastReceiver gpsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

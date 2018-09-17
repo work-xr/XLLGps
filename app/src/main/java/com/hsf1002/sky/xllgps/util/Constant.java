@@ -59,4 +59,7 @@ public class Constant {
     // 关闭数据业务
     public static final String ACTION_INACTIVATED_CONNECTIVITY = "intent.action.INACTIVATED_CONNECTIVITY";
     public static final String BAIDU_GPS_LOCATION_DEFAULT_COORDINATE_TYPE = "GCJ02";  // WGS84：大地坐标系     GCJ02：国家测绘局坐标系统     BD09：百度坐标系
+
+    public static final String SMS_FROM_SERVER_CONTENT_PART1 = "福建青鸟三盛";
+    public static final String SMS_FROM_SERVER_CONTENT_PART2 = "老人机即时定位API";
 }

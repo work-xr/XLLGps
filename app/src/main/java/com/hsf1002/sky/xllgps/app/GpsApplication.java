@@ -27,13 +27,20 @@ public class GpsApplication extends Application {
 
         Log.d(TAG, "onCreate: ");
         sContext = getApplicationContext();
+
         BaiduGpsApp.getInstance().initBaiduSDK(sContext);
-        //startService(new Intent(this, GpsService.class));
         GpsService.setServiceAlarm(sContext, true);
 
         rxjavaHttpInit();
     }
 
+    /**
+    *  author:  hefeng
+    *  created: 18-9-17 下午7:20
+    *  desc:    初始化RxJava配置
+    *  param:
+    *  return:
+    */
     private void rxjavaHttpInit()
     {
         RxHttpUtils.init(this);
@@ -48,6 +55,13 @@ public class GpsApplication extends Application {
                 .setLog(true);
     }
 
+    /**
+    *  author:  hefeng
+    *  created: 18-9-17 下午7:20
+    *  desc:    获取应用的context
+    *  param:
+    *  return:
+    */
     public static Context getAppContext()
     {
         return sContext;

@@ -14,6 +14,13 @@ import com.hsf1002.sky.xllgps.app.GpsApplication;
 public class SprdCommonUtils {
     private static final String TAG = "SprdCommonUtils";
 
+    /**
+    *  author:  hefeng
+    *  created: 18-9-17 下午7:25
+    *  desc:    获取手机IMEI号码
+    *  param:
+    *  return:
+    */
     public String getIMEI()
     {
         TelephonyManager telephonyManager = (TelephonyManager) GpsApplication.getAppContext().getSystemService(Context.TELEPHONY_SERVICE);
@@ -40,6 +47,13 @@ public class SprdCommonUtils {
         return deviceId;
     }
 
+    /**
+    *  author:  hefeng
+    *  created: 18-9-17 下午7:25
+    *  desc:    创建单例
+    *  param:
+    *  return:
+    */
     public static SprdCommonUtils getInstance()
     {
         return Holder.instance;

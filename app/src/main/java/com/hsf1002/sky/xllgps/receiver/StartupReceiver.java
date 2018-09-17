@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import static com.hsf1002.sky.xllgps.util.Constant.ACTION_POWER_ON;
+
 /**
  * Created by hefeng on 18-6-6.
  */
@@ -14,8 +16,12 @@ public class StartupReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // start gps service
-        Log.d(TAG, "onReceive: ");
-        //XLJGpsService.setServiceAlarm(context, true);
+        String action = intent.getAction();
+        Log.d(TAG, "onReceive: action = " + action);
+
+        if (action.equals(ACTION_POWER_ON))
+        {
+
+        }
     }
 }

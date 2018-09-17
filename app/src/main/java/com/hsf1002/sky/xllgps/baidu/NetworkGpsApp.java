@@ -1,4 +1,4 @@
-package com.hsf1002.sky.xllgps.location;
+package com.hsf1002.sky.xllgps.baidu;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

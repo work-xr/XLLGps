@@ -42,7 +42,7 @@ public class SharedPreUtils {
     public void putInt(String key, int value)
     {
         editor.putInt(key, value);
-        editor.apply();
+        editor.commit();
     }
 
     public Boolean getBoolean(String key, Boolean value)
@@ -53,7 +53,7 @@ public class SharedPreUtils {
     public void putBoolean(String key, Boolean value)
     {
         editor.putBoolean(key, value);
-        editor.apply();
+        editor.commit();
     }
 
     public String getString(String key, String value)
@@ -64,6 +64,6 @@ public class SharedPreUtils {
     public void putString(String key, String value)
     {
         editor.putString(key, value);
-        editor.apply();
+        editor.commit();
     }
 }
