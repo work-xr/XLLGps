@@ -62,4 +62,5 @@ public class Constant {
 
     public static final String SMS_FROM_SERVER_CONTENT_PART1 = "福建青鸟三盛";
     public static final String SMS_FROM_SERVER_CONTENT_PART2 = "老人机即时定位API";
+    public static final String ACTION_SMS_FROM_SERVER = "intent.action.SEND_SERVER_MSG";
 }

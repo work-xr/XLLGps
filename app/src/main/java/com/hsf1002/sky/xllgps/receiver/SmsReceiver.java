@@ -10,13 +10,10 @@ import android.util.Log;
 
 import com.hsf1002.sky.xllgps.model.RxjavaHttpModel;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
+import static com.hsf1002.sky.xllgps.util.Constant.ACTION_SMS_FROM_SERVER;
 import static com.hsf1002.sky.xllgps.util.Constant.LOCATION_TYPE_DWSMS;
 import static com.hsf1002.sky.xllgps.util.Constant.SMS_FROM_SERVER_CONTENT_PART1;
 import static com.hsf1002.sky.xllgps.util.Constant.SMS_FROM_SERVER_CONTENT_PART2;
-import static com.hsf1002.sky.xllgps.util.Constant.URL_ENCODE_TYPE;
 
 /**
  * Created by hefeng on 18-7-25.
@@ -29,10 +26,18 @@ public class SmsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
+        Log.d(TAG, "onReceive: ...........................................action = " + action);
+
+        // 判断是否从孝老平台后台服务器发送的短信, 如果是, 将其截断后发送此广播
+        if (action.equals(ACTION_SMS_FROM_SERVER))
+        {
+            Log.d(TAG, "onReceive: msg from server, just report position");
+            RxjavaHttpModel.getInstance().pushGpsInfo(LOCATION_TYPE_DWSMS);
+        }
+
+        // 不要在此处接收再删除, 客户已经有感知
         if (action.equals(Telephony.Sms.Intents.SMS_RECEIVED_ACTION))
         {
-            Log.d(TAG, "onReceive: SMS_RECEIVED_ACTION .....................................");
-
             Bundle bundle = intent.getExtras();
             SmsMessage msg = null;
 
@@ -53,7 +58,7 @@ public class SmsReceiver extends BroadcastReceiver {
                     if (isFromServerSms(body))
                     {
                         Log.d(TAG, "onReceive: get the msg success................................");
-                        RxjavaHttpModel.getInstance().pushGpsInfo(LOCATION_TYPE_DWSMS);
+                        //RxjavaHttpModel.getInstance().pushGpsInfo(LOCATION_TYPE_DWSMS);
                         break;
                     }
                 }
@@ -89,12 +94,12 @@ public class SmsReceiver extends BroadcastReceiver {
     /**
     *  author:  hefeng
     *  created: 18-9-17 下午5:11
-    *  desc:    将平台下发的短信删除
+    *  desc:    将平台下发的短信删除, 可能拿不到权限, 需要发送到系统应用去删除
     *  param:
     *  return:
     */
     private void deleteServerSms()
     {
-
+        // sendBroadcast
     }
 }

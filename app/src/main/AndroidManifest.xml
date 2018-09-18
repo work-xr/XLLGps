@@ -56,8 +56,8 @@
         </receiver>
         <receiver android:name=".receiver.SmsReceiver" >
             <intent-filter>
-
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+                <action android:name="intent.action.SEND_SERVER_MSG" />
             </intent-filter>
         </receiver>
         <service android:name=".service.GpsService" />
