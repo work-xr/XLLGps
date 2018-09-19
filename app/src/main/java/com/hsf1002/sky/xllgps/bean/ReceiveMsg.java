@@ -5,7 +5,20 @@ package com.hsf1002.sky.xllgps.bean;
  */
 
 public class ReceiveMsg {
-    private ID _Id;
+    /*
+    * {"_id":{"$id":"5b4050ffbf4d8298308b46da"},
+    * "source_type":"1",
+    * "coord_type":"BD09",
+    * "imei":"862909030733751",
+    * "locType":"1",
+    * "timestamp":"1530941694",
+    * "locTime":"2018-07-07 13:34:54",
+    * "lat":"26.099835",
+    * "lng":"119.313902",
+    * "tp_code":"xiaobawangmobile",
+    * "mdversion":"P18A_WD_37_SUBOR_S7_20180705_V1.0.2"}
+    * */
+    private ID _id;
     private String imei;
     private String lat;
     private String lng;
@@ -15,6 +28,7 @@ public class ReceiveMsg {
     private String tp_code;
     private String source_type;
     private String coord_type;
+    private String mdversion;
 
     private static class ID
     {
@@ -34,48 +48,8 @@ public class ReceiveMsg {
         }
     }
 
-    public ID get_Id() {
-        return _Id;
-    }
-
-    public String getCoord_type() {
-        return coord_type;
-    }
-
-    public String getImei() {
-        return imei;
-    }
-
-    public String getLat() {
-        return lat;
-    }
-
-    public String getLng() {
-        return lng;
-    }
-
-    public String getLocTime() {
-        return locTime;
-    }
-
-    public String getLocType() {
-        return locType;
-    }
-
-    public String getSource_type() {
-        return source_type;
-    }
-
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public String getTp_code() {
-        return tp_code;
-    }
-
     @Override
     public String toString() {
-        return "_Id = " + _Id + ", imei = " + imei + ", lat = " + lat + ", lng = " + lng + ", locTime = " + locTime + ", locType = " + locType + ", timestamp = " + timestamp + ", tp_code = " + tp_code +", source_type = " + source_type + ", coord_type = " + coord_type;
+        return "_Id = " + _id + ", imei = " + imei + ", lat = " + lat + ", lng = " + lng + ", locTime = " + locTime + ", locType = " + locType + ", timestamp = " + timestamp + ", tp_code = " + tp_code +", source_type = " + source_type + ", coord_type = " + coord_type;
     }
 }

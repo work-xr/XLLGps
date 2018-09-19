@@ -6,10 +6,11 @@
     tools:context="com.hsf1002.sky.xllgps.ui.MainActivity">
 
     <TextView
-        android:id="@+id/btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:id="@+id/text_view"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:text="Hello World! \n Click me to get gps info"
      />
 
 </LinearLayout>

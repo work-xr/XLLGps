@@ -20,10 +20,10 @@ import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_LOCATION_DEFAULT_LA
 import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_LOCATION_DEFAULT_LOCTIME;
 import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_LOCATION_DEFAULT_LOCTYPE;
 import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_LOCATION_DEFAULT_LONGITUDE;
-import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_LOCATION_SCAN_TIMEOUT;
 import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_LOCATION_TYPE_GPS;
 import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_LOCATION_TYPE_LBS;
 import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_LOCATION_TYPE_WIFI;
+import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_SCAN_SPAN_TIME_INTERVAL;
 
 
 /**
@@ -99,7 +99,7 @@ public class BaiduGpsApp {
         //option.setCoorType("bd09ll");
         option.setIsNeedAddress(true);
         //可选，设置发起定位请求的间隔，int类型，单位ms, 如果设置为0，则代表单次定位，即仅定位一次，默认为0, 如果设置非0，需设置1000ms以上才有效
-        option.setScanSpan(BAIDU_GPS_LOCATION_SCAN_TIMEOUT);
+        option.setScanSpan(BAIDU_GPS_SCAN_SPAN_TIME_INTERVAL);
         //可选，设置是否使用gps，默认false, 使用高精度和仅用设备两种定位模式的，参数必须设置为true
         option.setOpenGps(false);
         //可选，定位SDK内部是一个service，并放到了独立进程。设置是否在stop的时候杀死这个进程，默认（建议）不杀死，即setIgnoreKillProcess(true)

@@ -14,7 +14,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.hsf1002.sky.xllgps.app.GpsApplication;
-import com.hsf1002.sky.xllgps.http.HttpUtil;
+import com.hsf1002.sky.xllgps.util.HttpUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -161,7 +161,7 @@ public class NetworkGpsApp {
                 try{
                     String request = "http://maps.googleapis.com/maps/api/geocode/json?latlng=";
                     request += location.getLatitude()+","+location.getLongitude()+"&sensor=false";
-                    String response = HttpUtil.getHttpRequest(GpsApplication.getAppContext(),request);
+                    String response = HttpUtil.getHttpRequest(request);
                     parseJSONResponse(response);
 
                 }

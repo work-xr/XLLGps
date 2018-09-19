@@ -23,12 +23,13 @@ public class SprdCommonUtils {
     */
     public String getIMEI()
     {
-        TelephonyManager telephonyManager = (TelephonyManager) GpsApplication.getAppContext().getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager telephonyManager = (TelephonyManager) sAppContext.getSystemService(Context.TELEPHONY_SERVICE);
         String deviceId = null;
-        //int phoneCount = telephonyManager.getPhoneCount();
-        //Log.d(TAG, "getIMEI: " + phoneCount);
+        //int phoneCount = telephonyManager.getPhoneCount();    // Android4.4 不支持此方法
 
-        for (int slot = 0; slot < 2/*phoneCount*/; slot++)
+        //Log.i(TAG, "getIMEI: start " );
+
+        //for (int slot = 0; slot < phoneCount; slot++)
         {
             try {
                 deviceId = telephonyManager.getDeviceId();
@@ -39,8 +40,8 @@ public class SprdCommonUtils {
 
             if (!TextUtils.isEmpty(deviceId))
             {
-                Log.d(TAG, "getIMEI: " + deviceId + ", i = " + slot);
-                break;
+               // Log.i(TAG, "getIMEI: imei = " + deviceId );
+               // break;
             }
         }
 

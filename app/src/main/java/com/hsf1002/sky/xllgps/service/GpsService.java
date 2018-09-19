@@ -15,9 +15,8 @@ import com.hsf1002.sky.xllgps.app.GpsApplication;
 import com.hsf1002.sky.xllgps.baidu.BaiduGpsApp;
 import com.hsf1002.sky.xllgps.model.RxjavaHttpModel;
 
-import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_SCAN_SPAN_TIME_INTERVAL;
+import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_SERVICE_SCAN_INTERVAL;
 import static com.hsf1002.sky.xllgps.util.Constant.LOCATION_SOURCE_TYPE_ORDINARY;
-import static com.hsf1002.sky.xllgps.util.Constant.LOCATION_TYPE_PLATFORM;
 
 /**
  * Created by hefeng on 18-6-11.
@@ -25,13 +24,20 @@ import static com.hsf1002.sky.xllgps.util.Constant.LOCATION_TYPE_PLATFORM;
 
 public class GpsService extends Service {
     private static final String TAG = "GpsService";
-    private static int startServiceInterval = BAIDU_GPS_SCAN_SPAN_TIME_INTERVAL;
+    private static int startServiceInterval = BAIDU_GPS_SERVICE_SCAN_INTERVAL;
     private static Context sContext = null;
     private static final String ACTION_TIMING_REPORT_GPS_LOCATION = "action.timing.report.gps.location";
     private static Intent sIntentReceiver = new Intent(ACTION_TIMING_REPORT_GPS_LOCATION);
     private static PendingIntent sPendingIntent = null;
     private static AlarmManager sManager = null;
 
+    /**
+    *  author:  hefeng
+    *  created: 18-9-18 下午5:36
+    *  desc:       
+    *  param:   
+    *  return:  
+    */
     @Override
     public void onCreate() {
         super.onCreate();

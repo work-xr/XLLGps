@@ -5,7 +5,6 @@ package com.hsf1002.sky.xllgps.util;
  */
 
 public class Constant {
-
     public static final String URL_LV = "&lv=1";
     public static final String URL_APP_ID = "&app_id=bc7007b968877d0d3eec4caa77127c99a96aeb2b";
     public static final String URL_APP_SECRET = "&app_secret=9ff96155b3f42dc7a337aa59ca59578b";
@@ -29,22 +28,19 @@ public class Constant {
     public static final int RXJAVAHTTP_WRITE_TIMEOUT = 100;
     public static final int RXJAVAHTTP_CONNCET_TIMEOUT = 100;
 
-    public static final String SOS_RECEIVED_ACTION = "sos_received_action";
     public static final String LOCATION_TYPE_PLATFORM = "1";         // 平台定位
     public static final String LOCATION_TYPE_DWSMS = "2";            // DW短信定位
     public static final String LOCATION_SOURCE_TYPE_ORDINARY = "1";  // 普通定位
     public static final String LOCATION_SOURCE_TYPE_SOS = "2";       // SOS定位
 
-    // 每隔多久启动一次IntentService服务来开始定位,可由服务器端通过调用setStartServiceInterval进行设置更改
-    public static final int BAIDU_GPS_SCAN_SPAN_TIME_INTERVAL = 3 * 60 * 1000;
-    // 每次启动百度地图服务XLJGpsService.setServiceAlarm(getApplicationContext(), true);, 如果3分钟内没有定位成功, 自动停止地图服务stopBaiduGps
-    public static final int BAIDU_GPS_FIRST_SCAN_TIME_MAX = 3 * 60 * 1000;
+	// 定位服务上报的时间间隔
+    public static final int BAIDU_GPS_SERVICE_SCAN_INTERVAL = 30 * 60 * 1000;
     // 每隔多久发起一次请求
-    public static final int BAIDU_GPS_LOCATION_SCAN_TIMEOUT = 10 * 1000;
+    public static final int BAIDU_GPS_SCAN_SPAN_TIME_INTERVAL = 1 * 60 * 1000;
     public static final String BAIDU_GPS_LOCATION_TYPE_GPS = "gps";
     public static final String BAIDU_GPS_LOCATION_TYPE_LBS = "lbs";
     public static final String BAIDU_GPS_LOCATION_TYPE_WIFI = "wifi";
-    public static final String BAUDU_GPS_LOCATION_COORD_TYPE = "gcj02";
+
     // 由于上传给服务器的数据不能为空, 定位数据的默认值
     public static final String BAIDU_GPS_LOCATION_DEFAULT_ADDRESS = "sz";
     public static final String BAIDU_GPS_LOCATION_DEFAULT_LONGITUDE = "4.9E-324";   // 114.044044
@@ -63,4 +59,8 @@ public class Constant {
     public static final String SMS_FROM_SERVER_CONTENT_PART1 = "福建青鸟三盛";
     public static final String SMS_FROM_SERVER_CONTENT_PART2 = "老人机即时定位API";
     public static final String ACTION_SMS_FROM_SERVER = "intent.action.SEND_SERVER_MSG";
+
+    public static final String RXJAVAHTTP_SERVER_TEST_URL = "http://api.cloud.site4test.com/thirdparty/mobile/location/list?imei=864648030095476&start=2017-10-25%2017:00:00&lv=1&app_id=bc7007b968877d0d3eec4caa77127c99a96aeb2b&app_secret=9ff96155b3f42dc7a337aa59ca59578b";
+    public static final String RXJAVAHTTP_SERVER_TEST_URL_PART1 = "http://api.cloud.site4test.com/thirdparty/mobile/location/list";
+    public static final String RXJAVAHTTP_SERVER_TEST_URL_PART2 = "imei=864648030095476&start=2017-10-25%2017:00:00&lv=1&app_id=bc7007b968877d0d3eec4caa77127c99a96aeb2b&app_secret=9ff96155b3f42dc7a337aa59ca59578b";
 }
