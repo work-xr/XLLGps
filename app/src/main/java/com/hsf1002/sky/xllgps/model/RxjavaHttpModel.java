@@ -11,6 +11,7 @@ import com.hsf1002.sky.xllgps.http.ApiService;
 import com.hsf1002.sky.xllgps.params.BaiduGpsParam;
 import com.hsf1002.sky.xllgps.result.ResultGpsMsg;
 import com.hsf1002.sky.xllgps.util.MD5Utils;
+import com.hsf1002.sky.xllgps.util.NetworkUtils;
 import com.hsf1002.sky.xllgps.util.SprdCommonUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -35,6 +36,92 @@ import static com.hsf1002.sky.xllgps.util.Constant.URL_TPCODE;
 
 public class RxjavaHttpModel{
     private static final String TAG = "RxjavaHttpModel";
+    private static GpsType sGpsType = null;
+
+    /**
+    *  author:  hefeng
+    *  created: 18-9-21 上午11:20
+    *  desc:
+    *  param:
+    *  return:
+    */
+    private class GpsType
+    {
+        // 1: 平台定位  2: DW短信定位
+        private String type = null;
+        // 1: 普通定位  2: SOS定位
+        private String source_type = null;
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getSource_type() {
+            return source_type;
+        }
+
+        public void setSource_type(String source_type) {
+            this.source_type = source_type;
+        }
+    }
+
+    /**
+    *  author:  hefeng
+    *  created: 18-9-21 上午11:23
+    *  desc:    由外部调用, 设置type
+    *  param:
+    *  return:
+    */
+    public void setGpsType(String type)
+    {
+        sGpsType.setType(type);
+    }
+
+    /**
+    *  author:  hefeng
+    *  created: 18-9-21 上午11:25
+    *  desc:    由外部调用, 设置source_type
+    *  param:
+    *  return:
+    */
+    public void setGpsSourceType(String sourceType)
+    {
+        sGpsType.setSource_type(sourceType);
+    }
+
+    /**
+    *  author:  hefeng
+    *  created: 18-9-21 上午11:23
+    *  desc:    由外部调用, 是否需要上报定位信息
+    *  param:
+    *  return:
+    */
+    public boolean isReady()
+    {
+        if (sGpsType.getSource_type() != null || sGpsType.getType() != null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+    *  author:  hefeng
+    *  created: 18-9-21 上午11:30
+    *  desc:
+    *  param:
+    *  return:
+    */
+    public void resetGpsType()
+    {
+        setGpsType(null);
+        setGpsSourceType(null);
+    }
 
     /**
     *  author:  hefeng
@@ -85,7 +172,7 @@ public class RxjavaHttpModel{
     *  param:
     *  return:
     */
-    public void pushGpsInfo(String source_type)
+    public void pushGpsInfo()
     {
         //String mobile = BaiduGpsApp.getInstance().getSendMsg().getMobile();
         String imei = SprdCommonUtils.getInstance().getIMEI();
@@ -97,6 +184,7 @@ public class RxjavaHttpModel{
         String coord_type = BaiduGpsApp.getInstance().getBaiduGpsStatus().getCoord_type();*/
         String timeStamp = String.valueOf(System.currentTimeMillis());
         String mvversion = "V1.0000000";//SystemProperties.get("ro.product.externversion");
+        String source_type = sGpsType.source_type;
 
         timeStamp = timeStamp.substring(0, 10);
         String params = getParamStr(timeStamp, source_type);
@@ -159,6 +247,12 @@ public class RxjavaHttpModel{
                 .postUrl(completeUrl)
                 .compose(Transformer.<ResultGpsMsg>switchSchedulers())
                 .subscribe(new CommonObserver<ResultGpsMsg>() {
+                    @Override
+                    public void onComplete() {
+                        //super.onComplete();
+                        NetworkUtils.sendBroadCastNetworkInactivated();
+                    }
+
                     @Override
                     protected void onError(String s) {
                         Log.i(TAG, "onError: s = " + s);

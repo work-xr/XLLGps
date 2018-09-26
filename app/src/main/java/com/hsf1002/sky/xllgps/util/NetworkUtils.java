@@ -1,6 +1,7 @@
 package com.hsf1002.sky.xllgps.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -11,6 +12,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import static com.hsf1002.sky.xllgps.util.Constant.ACTION_ACTIVATED_CONNECTIVITY;
+import static com.hsf1002.sky.xllgps.util.Constant.ACTION_INACTIVATED_CONNECTIVITY;
 
 /**
  * Created by hefeng on 18-8-27.
@@ -71,5 +75,35 @@ public class NetworkUtils {
             Log.d("----result---", "result = " + result);
         }
         return false;
+    }
+
+    /**
+     *  author:  hefeng
+     *  created: 18-9-11 下午2:38
+     *  desc:
+     *  param:
+     *  return:
+     */
+    public static void sendBroadCastNetworkActivated()
+    {
+        Intent intent = new Intent();
+        intent.setAction(ACTION_ACTIVATED_CONNECTIVITY);
+        GpsApplication.getAppContext().sendBroadcast(intent);
+        Log.i(TAG, "sendBroadCastNetworkActivated: ");
+    }
+
+    /**
+     *  author:  hefeng
+     *  created: 18-9-11 下午2:39
+     *  desc:
+     *  param:
+     *  return:
+     */
+    public static void sendBroadCastNetworkInactivated()
+    {
+        Intent intent = new Intent();
+        intent.setAction(ACTION_INACTIVATED_CONNECTIVITY);
+        GpsApplication.getAppContext().sendBroadcast(intent);
+        Log.i(TAG, "sendBroadCastNetworkInactivated: ");
     }
 }

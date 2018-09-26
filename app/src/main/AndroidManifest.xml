@@ -26,7 +26,10 @@
     <!-- 接收读取短信广播-->
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
-
+    <!-- 发送短信权限 -->
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <!-- 获取唤醒锁权限 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:name=".app.GpsApplication"
@@ -58,6 +61,11 @@
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
                 <action android:name="intent.action.SEND_SERVER_MSG" />
+            </intent-filter>
+        </receiver>
+	<receiver android:name=".receiver.NetworkReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
         <service android:name=".service.GpsService" />

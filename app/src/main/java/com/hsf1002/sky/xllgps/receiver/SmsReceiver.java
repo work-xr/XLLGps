@@ -9,8 +9,10 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 
 import com.hsf1002.sky.xllgps.model.RxjavaHttpModel;
+import com.hsf1002.sky.xllgps.util.NetworkUtils;
 
 import static com.hsf1002.sky.xllgps.util.Constant.ACTION_SMS_FROM_SERVER;
+import static com.hsf1002.sky.xllgps.util.Constant.LOCATION_SOURCE_TYPE_SOS;
 import static com.hsf1002.sky.xllgps.util.Constant.LOCATION_TYPE_DWSMS;
 import static com.hsf1002.sky.xllgps.util.Constant.SMS_FROM_SERVER_CONTENT_PART1;
 import static com.hsf1002.sky.xllgps.util.Constant.SMS_FROM_SERVER_CONTENT_PART2;
@@ -32,7 +34,9 @@ public class SmsReceiver extends BroadcastReceiver {
         if (action.equals(ACTION_SMS_FROM_SERVER))
         {
             Log.d(TAG, "onReceive: msg from server, just report position");
-            RxjavaHttpModel.getInstance().pushGpsInfo(LOCATION_TYPE_DWSMS);
+            //RxjavaHttpModel.getInstance().pushGpsInfo(LOCATION_TYPE_DWSMS);
+            NetworkUtils.sendBroadCastNetworkActivated();
+            RxjavaHttpModel.getInstance().setGpsType(LOCATION_TYPE_DWSMS);
         }
 
         // 不要在此处接收再删除, 客户已经有感知

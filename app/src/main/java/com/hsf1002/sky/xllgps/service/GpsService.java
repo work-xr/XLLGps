@@ -14,9 +14,11 @@ import android.util.Log;
 import com.hsf1002.sky.xllgps.app.GpsApplication;
 import com.hsf1002.sky.xllgps.baidu.BaiduGpsApp;
 import com.hsf1002.sky.xllgps.model.RxjavaHttpModel;
+import com.hsf1002.sky.xllgps.util.NetworkUtils;
 
 import static com.hsf1002.sky.xllgps.util.Constant.BAIDU_GPS_SERVICE_SCAN_INTERVAL;
 import static com.hsf1002.sky.xllgps.util.Constant.LOCATION_SOURCE_TYPE_ORDINARY;
+import static com.hsf1002.sky.xllgps.util.Constant.LOCATION_TYPE_DWSMS;
 
 /**
  * Created by hefeng on 18-6-11.
@@ -125,6 +127,12 @@ public class GpsService extends Service {
      *  author:  hefeng
      *  created: 18-8-22 上午9:00
      *  desc:    循环发送广播
+     *  0. 不管是按SOS, 定时还是实时请求定位, 先
+     *  1. 发送广播给sos 打开数据业务
+     *  2. 打开WakeLock
+     *  3. 收到数据业务打开的广播, 开启百度定位, 并上报位置信息
+     *  4. 发送广播给sos 关闭数据业务
+     *  5. 收到数据业务关闭的广播, 关闭WakeLock
      *  param:
      *  return:
      */
@@ -133,8 +141,11 @@ public class GpsService extends Service {
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "onReceive: gpsReceiver startServiceInterval = " + startServiceInterval);
 
-            BaiduGpsApp.getInstance().startBaiduGps();
-            RxjavaHttpModel.getInstance().pushGpsInfo(LOCATION_SOURCE_TYPE_ORDINARY);
+            //BaiduGpsApp.getInstance().startBaiduGps();
+            //RxjavaHttpModel.getInstance().pushGpsInfo(LOCATION_SOURCE_TYPE_ORDINARY);
+            // 只是去打开数据业务
+            NetworkUtils.sendBroadCastNetworkActivated();
+            RxjavaHttpModel.getInstance().setGpsSourceType(LOCATION_SOURCE_TYPE_ORDINARY);
 
             // setExact 无法唤醒
             //sManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + startServiceInterval, sPendingIntent);

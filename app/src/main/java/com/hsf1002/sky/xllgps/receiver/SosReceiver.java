@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.hsf1002.sky.xllgps.model.RxjavaHttpModel;
+import com.hsf1002.sky.xllgps.util.NetworkUtils;
 
 import static com.hsf1002.sky.xllgps.util.Constant.ACTION_SOS_REPORT_POSITION;
 import static com.hsf1002.sky.xllgps.util.Constant.LOCATION_SOURCE_TYPE_SOS;
@@ -27,7 +28,9 @@ public class SosReceiver extends BroadcastReceiver {
 
         if (action.equals(ACTION_SOS_REPORT_POSITION))
         {
-            RxjavaHttpModel.getInstance().pushGpsInfo(LOCATION_SOURCE_TYPE_SOS);
+            //RxjavaHttpModel.getInstance().pushGpsInfo(LOCATION_SOURCE_TYPE_SOS);
+            NetworkUtils.sendBroadCastNetworkActivated();
+            RxjavaHttpModel.getInstance().setGpsSourceType(LOCATION_SOURCE_TYPE_SOS);
         }
     }
 }
